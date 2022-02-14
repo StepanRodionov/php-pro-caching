@@ -18,9 +18,8 @@ new \App\Cache\Cache();
 $productDatabase = new ProductDatabase();
 $reviewApi = new ReviewApi();
 $productRepository = new ProductRepository($productDatabase);
-$cachedProductRepository = new \App\Repository\CachedProductRepository($productRepository);
 $reviewRepository = new ReviewRepository($reviewApi);
-$productService = new ProductService($cachedProductRepository, $reviewRepository);
+$productService = new ProductService($productRepository, $reviewRepository);
 
 // Имитация http-контроллера (не использовать в реальных проектах!)
 

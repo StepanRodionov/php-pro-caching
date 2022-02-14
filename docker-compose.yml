@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  php-fpm:
+    container_name: otus-cache-php-fpm
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/var/www/app
+    networks:
+      - app-network
+
+  nginx:
+    container_name: otus-cache-nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www/app
+    networks:
+      - app-network
+    depends_on:
+      - php-fpm
+
+  redis:
+    container_name: otus-cache-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    depends_on:
+      - php-fpm
+
+  memcached:
+    container_name: otus-cache-memcached
+    image: memcached:latest
+    ports:
+      - "11211:11211"
+    networks:
+      - app-network
+    depends_on:
+      - php-fpm
+
+networks:
+  app-network:
+    driver: bridge
